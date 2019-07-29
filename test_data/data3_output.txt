@@ -1,0 +1,5 @@
+4 [mining]
+2 [frequent]
+2 [frequent mining]
+2 [mining pattern]
+2 [pattern]
