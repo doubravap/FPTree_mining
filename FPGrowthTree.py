@@ -1,13 +1,17 @@
+#input the minimum support threshold for an itemset to be frequent
 min_sup = int(input())
 
+#input the dataset to be mined for frequent pattern and store each unique transaction within the dataset in a database
 database = {}
 while True:
     try:
-        database[frozenset(input().split())] = 1
+        transaction = frozenset(input().split())
+        #record the frequency of each transaction in the database
+        database[transaction] = database.get(transaction, 0) + 1
     except EOFError:
         break
 
-
+#The FPTree class which will be used to create the Frequent Pattern Growth Tree 
 class FPTree:
     def __init__(self, node, count, parent):
         self.node = node
