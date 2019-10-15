@@ -1,17 +1,15 @@
-#input the minimum support threshold for an itemset to be frequent
 min_sup = int(input())
 
-#input the dataset to be mined for frequent pattern and store each unique transaction within the dataset in a database
+#The database that will be mined for frequent patterns
 database = {}
 while True:
     try:
         transaction = frozenset(input().split())
-        #record the frequency of each transaction in the database
         database[transaction] = database.get(transaction, 0) + 1
     except EOFError:
         break
 
-#The FPTree class which will be used to create the Frequent Pattern Growth Tree 
+#The class for the FP-Growth tree  
 class FPTree:
     def __init__(self, node, count, parent):
         self.node = node
@@ -23,7 +21,7 @@ class FPTree:
     def increment(self, val):
         self.count += val
 
-
+#Every node in the FPTree is printed, separated by the same number of *tabs* as its level on the FPTree
 def print_FPTree(FPT, level):
     if FPT.node:
         print('\t' * level + FPT.node + ' ' + str(FPT.count))
@@ -31,7 +29,7 @@ def print_FPTree(FPT, level):
     for child in FPT.children.values():
         print_FPTree(child, level+1)
 
-
+#Add all the frequent items to the FP-Growth Tree
 def growFPTree(FPT, data, freq_items_dict, num_data):
     if data[0] in FPT.children:
         FPT.children[data[0]].increment(num_data)
@@ -50,7 +48,7 @@ def growFPTree(FPT, data, freq_items_dict, num_data):
     if len(data) > 1:
         growFPTree(FPT.children[data[0]], data[1::], freq_items_dict, num_data)
 
-
+#Create the FP-Growth tree, given the database and the minimum support for an item in the database to be frequent
 def create_FPTree(database, min_support):
     freq_items = {}
     for data, count in database.items():
@@ -78,7 +76,7 @@ def create_FPTree(database, min_support):
         
     return FPT, freq_items
 
-
+#Mine the FP-Growth tree for frequent patterns/itemsets
 def mine_FPTree(FPT, freq_items_dict, min_support, prev_itemset, freq_itemsets):
     #temp_freq_itemlist = sorted(freq_items_dict.items(), key=lambda item: item[0])
     #sorted_freq_itemlist = [sorted_item[0] for sorted_item in sorted(temp_freq_itemlist, key=lambda item: item[1][0], reverse=True)]
